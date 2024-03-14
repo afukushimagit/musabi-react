@@ -1,0 +1,4 @@
+void func()
+{
+  print("func");
+}
