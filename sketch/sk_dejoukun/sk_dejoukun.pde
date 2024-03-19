@@ -1,35 +1,30 @@
-size( 400, 400 );
+void setup()
+{
+  size( 1000, 1000 );
+  drawTree( width/2, height, 200, -90, 16 );
+}
 
-/*
-PImage img;
-img = loadImage("dinfo_logo.jpg");
-
-background(img);
-*/
-background(204);
-
-noStroke();  // fuchi nashi
-
-// finger
-fill( 0 );
-ellipse( 300, 151, 104, 136 );
-
-// finger mask
-fill( 204 );
-ellipse( 390, 130, 200, 200 );
-
-// daen
-fill( 0 );
-ellipse( 200, 230, 260, 200 );
-
-// mouth mask
-fill( 204 );
-ellipse( 198, 204, 116, 186 );
-
-// ue daen mask
-fill( 0 );
-ellipse( 198, 196, 200, 134 );
-
-// daen mask
-fill( 204 );
-ellipse( 198, 204, 90, 60 );
+void drawTree( float fBeginX, float fBeginY, float fLength, float fDegree, int iLevel )
+{
+  pushMatrix();
+  
+  // 始点に座標系移動
+  translate( fBeginX, fBeginY );
+  
+  rotate( radians( fDegree ) );
+  
+  // 終端のXY座標値
+  float fEndX = fLength;
+  float fEndY = 0;
+    
+  // 線の描画
+  line( 0, 0, fEndX, fEndY );
+    
+  if( iLevel > 1 )
+  {
+    drawTree( fEndX, fEndY, fLength * 0.75, 20, iLevel - 1 );
+    drawTree( fEndX, fEndY, fLength * 0.75, - 20, iLevel - 1 );
+  }
+  
+  popMatrix();
+}
