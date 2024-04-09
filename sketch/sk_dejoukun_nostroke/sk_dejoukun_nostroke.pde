@@ -23,7 +23,7 @@ ellipse( 200, 230, 253, 200 );
 fill( 255, 160 );
 ellipse( 198, 202, 116, 186 );
 
-// ue daen mask
+// ue daen
 fill( 0, 255, 0, 160 );
 ellipse( 198, 196, 200, 134 );
 
