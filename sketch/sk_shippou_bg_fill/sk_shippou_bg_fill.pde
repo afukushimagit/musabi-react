@@ -1,7 +1,7 @@
 size( 300, 300 );
 blendMode( DIFFERENCE );
-background( 255, 0, 0 );
-fill( 0, 255, 255 );
+background( 255, 0, 0 );  // 色指定
+fill( 0, 255, 255 );      // 色指定
 
 // 9 circles
 

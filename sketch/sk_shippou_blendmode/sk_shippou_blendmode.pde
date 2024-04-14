@@ -1,5 +1,5 @@
 size( 300, 300 );
-blendMode( DIFFERENCE );
+blendMode( DIFFERENCE );  // ブレンドモード（差の絶対値）
 
 // 9 circles
 
