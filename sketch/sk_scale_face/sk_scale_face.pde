@@ -26,6 +26,7 @@ noStroke();
 ellipse( -13, -4, 6, 5 );
 ellipse(  13, -4, 6, 5 );
 
+// 口
 stroke( 0 );
 arc( -3, 10, 6, 6, radians( 0 ), radians( 180 ) );
 arc(  3, 10, 6, 6, radians( 0 ), radians( 180 ) );
