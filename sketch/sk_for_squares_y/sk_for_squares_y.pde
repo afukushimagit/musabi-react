@@ -1,6 +1,6 @@
-size( 400, 100 );
+size( 100, 400 );
 
 for ( int iY = 0; iY < 400; iY += 50 )
 {
-  square( 50, iY, 50 );
+  square( 25, iY, 50 );
 }

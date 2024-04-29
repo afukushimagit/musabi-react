@@ -30,5 +30,3 @@ ellipse( 198, 196, 200, 134 );
 // daen mask
 fill( 204 );
 ellipse( 198, 204, 89, 58 );
-
-save("sk_translate_dejoukun.png");

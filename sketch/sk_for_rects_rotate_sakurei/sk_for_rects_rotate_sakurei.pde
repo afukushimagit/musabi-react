@@ -4,13 +4,9 @@ blendMode( DIFFERENCE );  // 差の絶対値
 
 translate( 200, 200 );
 
-for( int iAngle = 0; iAngle < 360; iAngle += 40 )
+for( int iRect = 0; iRect < 9; iRect++ )  // 9回繰り返し
 {
-  pushMatrix();
-  
   fill( 200 );
-  rotate( radians( iAngle ) );
+  rotate( radians( 40 ) );  // 40°回転
   rect( 0, -36, 140, 180 );
-  
-  popMatrix();
 }
