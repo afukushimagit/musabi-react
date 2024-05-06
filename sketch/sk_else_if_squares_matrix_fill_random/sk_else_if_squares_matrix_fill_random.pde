@@ -8,15 +8,17 @@ for ( int iY = 5; iY < 400; iY += 50 )
     
     if( fRand < 0.33 )
     {
-      square( iX, iY, 40 );
+      fill( 255 );
     }
     else if( fRand < 0.66 )
     {
-      triangle( iX + 20, iY, iX + 40, iY + 40, iX, iY + 40 );
+      fill( 100 );
     }
-    else 
+    else
     {
-      circle( iX + 20, iY + 20, 40 );
+      fill( 0 );
     }
+    
+    square( iX, iY, 40 );
   }
 }
