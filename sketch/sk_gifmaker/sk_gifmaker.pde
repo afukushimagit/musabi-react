@@ -17,7 +17,7 @@ void draw()
   
   gifMaker.addFrame(); // 現在の画面をアニメーションのコマとして追加
 
-  if (frameCount >= 100) { // 100コマアニメーションした時
+  if (millis() >= 3000) {  // 一定時間
     gifMaker.finish(); // GIFアニメの作成を終了
     exit();
   }

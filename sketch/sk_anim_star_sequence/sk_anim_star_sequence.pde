@@ -1,26 +1,14 @@
 /**************************************************************
-Sakuhin Caption...
-
-
+  アニメーションフレームワーク
+  png出力機能が無い簡易版
  **************************************************************/
 /**
   デバッグ機能
-    'S'キー：png出力
     'H'キー：時が変わったときのアニメーション再生
     'M'キー：分が変わったときのアニメーション再生
 */
-// === 'S'キーを押した時の出力画像名 ===
-//  "K3_[クラス][番号]_[苗字].png"
-String pngName = "K3_A00_Fukushima.png";
 
 // === アニメーション用変数/定数 ===
-
-// 正円
-float fCircleX = 0;         // 座標値
-float fCircleY = 400;
-float fCircleSpeedX = 0;    // 移動速度（ピクセル/秒）
-float fCircleSpeedY = 0;
-
 // 星型
 float fStarX = 400;         // 座標値
 float fStarY = 0;
@@ -77,65 +65,44 @@ void draw()
   
   // === アニメーションを記述 ===
   
-  // １秒間の間に角度を変える円弧
-  float fArcStart = -90 + 360 * deltaTimePerSec;// 円弧の始まり（°）
-  fill( 0 );
-  arc( 200, 200, 80, 80, radians( fArcStart ), radians( 270 ), PIE );
+  
+  
   
   // 秒が変化した時のアニメーション
-  //  大きくなりながら消えていく円
   if ( secondCurrent != secondPrev )
   {
     isSecondAnim = 1;  // アニメーション開始
     
     // アニメーション初期化
+    
+    
   }
   if ( isSecondAnim == 1 )  // アニメーション中
   {
-    if( deltaTimePerSec < 1 )  // アニメーションの継続条件
-    {
-      float fCircleSize = 4 * secondCurrent * deltaTimePerSec;
-      noFill();
-      stroke( 0, 255 - 255 * deltaTimePerSec );
-      circle( 200, 200, 80 +  fCircleSize );
-    }
-    else
-    {
-      isSecondAnim = 0;  // アニメーション終了
-    }
+    // アニメーション中の処理を記述
+    
+    
+    
+    isSecondAnim = 0;  // アニメーション終了
   }
   
+  
   // 分が変化した時のアニメーション
-  //  正円を投射する
   if ( minuteCurrent != minutePrev )
   {
     isMinuteAnim = 1;  // アニメーション開始
     
     // アニメーション初期化
-    fCircleX = 0;         // 初期位置
-    fCircleY = 400;
-    fCircleSpeedX = 140;  // 初速
-    fCircleSpeedY = -480;
+    
+    
   }
   if( isMinuteAnim == 1 )  // アニメーション中
   {
-    if( fCircleX < 400 )  // アニメーションの継続条件
-    {
-      // 位置
-      fCircleX += fCircleSpeedX * deltaTime;
-      fCircleY += fCircleSpeedY * deltaTime;
-      
-      // 速度
-      fCircleSpeedY += 350 * deltaTime;  // 重力加速
-      
-      fill( 255 );
-      stroke( 0 );
-      circle( fCircleX, fCircleY, 20 );
-    }
-    else
-    {
-      isMinuteAnim = 0;  // アニメーション終了
-    }
+    // アニメーション中の処理を記述
+    
+    
+    
+    isMinuteAnim = 0;  // アニメーション終了
   }
   
   
@@ -254,11 +221,7 @@ void updateTimePost()
 }
 void keyPressed()
 {
-  if ( key == 's' )
-  {
-    save(pngName);
-  }
-  else if ( key == 'h' )
+  if ( key == 'h' )
   {
     hourPrev = -1;
   }
