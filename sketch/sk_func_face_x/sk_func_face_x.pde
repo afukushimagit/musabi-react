@@ -18,6 +18,12 @@ void draw()
   
   translate( iX, 100 );  // スクリーン中央へ平行移動
   
+  // 顔の描画
+  drawFace();
+}
+
+void drawFace()
+{
   strokeWeight( 2 );
   
   // 顔輪郭と耳
