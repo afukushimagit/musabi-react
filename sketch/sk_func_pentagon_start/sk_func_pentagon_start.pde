@@ -19,7 +19,7 @@ void draw()
   }
   
   // ペンタゴンの描画
-   translate( 150, 150 );
+  translate( 150, 150 );
   rotate( radians( iPentagonAnimRot ) );
 
   beginShape();
