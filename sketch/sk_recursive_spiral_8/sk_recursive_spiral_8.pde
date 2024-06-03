@@ -1,0 +1,32 @@
+void setup()
+{
+  size(400, 400);
+  noLoop();  // アニメーションしない
+}
+
+void draw()
+{
+  stroke(0);
+  strokeWeight(4);
+  drawSpiral( 0, 100, 8, 0, 400 ); // 最初の再帰呼び出し
+}
+
+/**
+  再帰関数：線を再帰的に短くし，回転させながら描画する．
+*/
+void drawSpiral( float fBeginX, float fBeginY, float fLength, float fRot, int iLevel )
+{
+  if ( iLevel > 0 )  // 再帰の継続条件
+  {
+    // 線の終点
+    float fEndX = fBeginX + cos( radians( fRot ) ) * fLength;
+    float fEndY = fBeginY + sin( radians( fRot ) ) * fLength;
+    
+    line( fBeginX, fBeginY, fEndX, fEndY ); // 線を描画
+    
+    // 子の回転を再帰レベルによって周期的に変化する．
+    float fNewRot = fRot + 20 * sin( iLevel / 8.0 );
+    
+    drawSpiral( fEndX, fEndY, fLength, fNewRot, iLevel - 1 ); // 再帰呼び出し
+  }
+}
