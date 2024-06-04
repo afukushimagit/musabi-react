@@ -21,6 +21,8 @@ void drawTree( float fBeginX, float fBeginY, float fLength, float fRot, int iLev
     float fEndY = fBeginY + sin( radians( fRot ) ) * fLength;
     
     // 線の描画
+    colorMode( HSB, 12 );
+    stroke( 0, iLevel, 6 );      // 線の色
     strokeWeight( iLevel * 2 );  // 線の太さ
     line( fBeginX, fBeginY, fEndX, fEndY );
     
