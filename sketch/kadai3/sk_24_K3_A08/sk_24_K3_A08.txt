@@ -1,0 +1,641 @@
+/**************************************************************
+真夜中の電車の風景を表現しました。
+秒が変わったときに景色(街並み)が動き、分が変わったときは対向列車が、
+時が変わったときは銀河鉄道が走ります。
+対向電車と今乗ってる電車(街並みで表現）、銀河鉄道が交互になって別方向に動くことで奥行きを表現しました。
+希望としては女の子をうとうとさせたり、電車のアナウンスをセリフとして書き出せたらよかったなと思います。
+ **************************************************************/
+/**
+  デバッグ機能
+    'S'キー：png出力
+    'H'キー：時が変わったときのアニメーション再生
+    'M'キー：分が変わったときのアニメーション再生
+*/
+// === 'S'キーを押した時の出力画像名 ===
+//  "K3_[クラス][番号]_[苗字].png"
+String pngName = "K3_A08_Kurahashi.png";
+
+// === アニメーション用変数/定数 ===
+float ftRectX = 0;         // 対向電車のX座標値
+float fgRectX = 0;         // 銀河鉄道のX座標値
+
+
+// === Time Handling ===
+
+int hourCurrent;       // 現在の時（0~23）
+int minuteCurrent;     // 現在の分（0~59）
+int secondCurrent;     // 現在の秒（0~59）
+int iesecondCurrent;   // 町を動かすための変数
+float deltaTime;       // 前フレームからの経過時間（秒,0~1）
+float deltaTimePerSec; // 前回の秒が切り替わってからの経過時間（秒,0~1）
+int isHourAnim = 0;    // アニメーションフラグ（1:アニメーション中）
+int isMinuteAnim = 0;
+int isSecondAnim = 0;
+
+ 
+void setup()
+{
+  size( 600, 600 );
+  frameRate( 30 );  // フレームレートの指定
+  
+  // === Time Init ===
+  initTime();
+}
+
+void draw()
+{  
+  // === Time Update ===
+  updateTimePre();
+  
+  //hourCurrent = 1;  // 時 を指定して描画を確認したい場合に一時的に有効化
+  
+  // === 画面のクリア ===
+  
+  // 画面をクリア
+  fill( 204  );
+  noStroke();
+  rect( 0, 0, width, height );
+
+  // 既定の描画カラーに戻す．
+  fill( 255 );
+  stroke( 0 );
+  
+  // === アニメーションを記述 ===
+  
+ matinami();
+ densyanaisou();
+  // 秒が変化した時のアニメーション
+  if ( secondCurrent != secondPrev )
+  {
+    isSecondAnim = 1;  // アニメーション開始
+    
+    // アニメーション初期化
+    
+    
+  }
+  if ( isSecondAnim == 1 )  // アニメーション中
+  {
+    // アニメーション中の処理を記述
+    
+    
+    
+    isSecondAnim = 0;  // アニメーション終了
+  }
+  
+  
+  // 分が変化した時のアニメーション
+  if ( minuteCurrent != minutePrev )
+  {
+    isMinuteAnim = 1;  // アニメーション開始
+    
+    // アニメーション初期化
+     ftRectX = -1200;         // 初期位置
+    
+  }
+  if( isMinuteAnim == 1 )  // アニメーション中
+  {
+    // アニメーション中の処理を記述
+    if( ftRectX < 1200 )  // アニメーションの継続条件
+    {
+      taikoudensya();
+    }
+    else
+    {
+    
+    
+    isMinuteAnim = 0;  // アニメーション終了
+    }
+    
+  }
+  
+  // 時が変化した時のアニメーション
+  if ( hourCurrent != hourPrev )
+  {
+    isHourAnim = 1;  // アニメーションの開始
+    
+    // アニメーション初期化
+    
+    fgRectX = 600;         // 初期位置
+    
+  }
+  if( isHourAnim == 1 )
+  {
+    // アニメーション中の処理を記述
+     if( fgRectX > -1200 )  // アニメーションの継続条件
+    {
+      gingatetudou();
+    }
+    else
+    {
+    
+    isHourAnim = 0;  // アニメーション終了
+    }
+    
+  }
+   onnanoko();
+  // 時間をデバッグ表示（ 提出前に非表示にすること．）
+  /*
+  fill( 0 );
+  textSize(20);
+  text( hourCurrent + ":" + minuteCurrent + ":" + secondCurrent, 10, 20);
+  text( "deltaTimePerSec: " + deltaTimePerSec, 10, 40);
+  text( "deltaTime: " + deltaTime, 10, 60);
+  */
+  // === Time Update ===
+  updateTimePost();
+  
+}
+
+void densyanaisou(){
+  noStroke();
+  fill( 21, 67, 110 );//背景
+  rect( 0, 0, 600, 150 );
+  rect( 0, 450, 600, 150 );
+  fill( 180 );//窓枠
+  rect( 0, 140, 600, 10 );
+  rect( 0, 450, 600, 10 );
+  fill( 15, 135, 148 );//椅子
+  rect( 0, 460, 600, 95 );
+  fill( 0, 120, 133 );
+  rect( 0, 460, 600, 5 );
+  fill( 0, 120, 133 );
+  rect( 0, 530, 600, 5 );
+  fill( 5, 125, 138 );
+  rect( 0, 555, 600, 40 );
+  fill( 1, 47, 90 );//荷物置き場
+  rect( 0, 90, 600, 10 );
+  fill( 0, 27, 70 );//鞄
+  circle( 505, 60, 60 );
+  fill( 21, 67, 110 );
+  circle( 505, 60, 40 );
+  fill( 0, 27, 70 );
+  rect( 470, 50, 70, 40 );
+  
+}
+
+// === Time Handling ===
+int hourPrev;
+int minutePrev;
+int secondPrev;
+float millisCurrent;
+float millisPrev;
+float millisPrevSec;
+// === Time Handling Functions===
+void initTime()
+{
+  hourCurrent = hour();
+  minuteCurrent = minute();
+  secondCurrent = second();
+  millisCurrent = millis();
+  
+  hourPrev = hour();
+  minutePrev = minute();
+  secondPrev = second();
+  millisPrev = millis();
+  
+  millisPrevSec = millis();
+}
+void updateTimePre()
+{ 
+  if( hourPrev != hour() ) hourCurrent = hour();
+  if( minutePrev != minute() ) minuteCurrent = minute();
+  secondCurrent = second();
+  millisCurrent = millis();
+  
+  deltaTime = ( millisCurrent - millisPrev ) / 1000;
+  
+  if ( secondCurrent != secondPrev )
+  {
+    millisPrevSec = millis();
+  }
+  
+  deltaTimePerSec = ( millisCurrent - millisPrevSec ) / 1000;
+}
+void updateTimePost()
+{ 
+  hourPrev = hourCurrent;
+  minutePrev = minuteCurrent;
+  secondPrev = secondCurrent;
+  millisPrev = millisCurrent;
+}
+void keyPressed()
+{
+  if ( key == 's' )
+  {
+    save(pngName);
+  }
+  else if ( key == 'h' )
+  {
+    hourPrev = -1;
+  }
+  else if ( key == 'm' )
+  {
+    minutePrev = -1;
+  }
+}
+
+void gingatetudou()
+{
+
+     // 位置
+fgRectX -= 600 * deltaTime;
+    noStroke();
+     fill( 0 );
+     //線路
+     rect( fgRectX, 210, 890, 2 );
+     rect( fgRectX+900, 210, 30, 2 );
+     rect( fgRectX+940, 210, 20, 2 );
+     rect( fgRectX+970, 210, 15, 2 );
+     rect( fgRectX+995, 210, 10, 2 );
+     rect( fgRectX+1015, 210, 5, 2 );
+     //煙
+     fill( 100, 50 );
+     ellipse( fgRectX+65, 175, 15, 10 );
+     ellipse( fgRectX+95, 160, 30, 20 );
+     ellipse( fgRectX+150, 140, 60, 40 );
+     //列車本体
+     fill( 0 );
+     triangle( fgRectX+40, 207, 49, 203, 55, 207 );//列車下
+     rect( fgRectX+50, 203 , 35, 4 );
+     rect( fgRectX+87, 203 , 680, 4 );
+     circle( fgRectX+48, 196, 10 );//列車中心
+     rect( fgRectX+48, 189 , 36, 13 );
+     rect( fgRectX+70, 182 , 14, 20 );
+     rect( fgRectX+87, 189 , 680, 13 );
+     triangle( fgRectX+54, 194, 49, 181, 57, 181 );//列車下
+     fill( fgRectX+255, 255, 0 );
+     rect( fgRectX+74, 185 , 7, 9 );//窓
+//以下おそらくもっといい書き方があると思うが思いつかなかった
+     rect( fgRectX+90, 192, 4, 6);//1車両目
+     rect( fgRectX+96, 192, 4, 6);
+     rect( fgRectX+102, 192, 4, 6);
+     rect( fgRectX+108, 192, 4, 6);
+     rect( fgRectX+116, 192, 4, 6);//2車両目
+     rect( fgRectX+122, 192, 4, 6);
+     rect( fgRectX+128, 192, 4, 6);
+     rect( fgRectX+134, 192, 4, 6);
+     rect( fgRectX+142, 192, 4, 6);//3車両目
+     rect( fgRectX+148, 192, 4, 6);
+     rect( fgRectX+154, 192, 4, 6);
+     rect( fgRectX+160, 192, 4, 6);
+     rect( fgRectX+168, 192, 4, 6);//4車両目
+     rect( fgRectX+174, 192, 4, 6);
+     rect( fgRectX+180, 192, 4, 6);
+     rect( fgRectX+186, 192, 4, 6);
+     rect( fgRectX+194, 192, 4, 6);//5車両目
+     rect( fgRectX+200, 192, 4, 6);
+     rect( fgRectX+206, 192, 4, 6);
+     rect( fgRectX+212, 192, 4, 6);
+     rect( fgRectX+220, 192, 4, 6);//6車両目
+     rect( fgRectX+226, 192, 4, 6);
+     rect( fgRectX+232, 192, 4, 6);
+     rect( fgRectX+238, 192, 4, 6);
+     rect( fgRectX+246, 192, 4, 6);//7車両目
+     rect( fgRectX+252, 192, 4, 6);
+     rect( fgRectX+258, 192, 4, 6);
+     rect( fgRectX+264, 192, 4, 6);
+     rect( fgRectX+272, 192, 4, 6);//8車両目
+     rect( fgRectX+278, 192, 4, 6);
+     rect( fgRectX+284, 192, 4, 6);
+     rect( fgRectX+290, 192, 4, 6);
+     rect( fgRectX+298, 192, 4, 6);//9車両目
+     rect( fgRectX+304, 192, 4, 6);
+     rect( fgRectX+310, 192, 4, 6);
+     rect( fgRectX+316, 192, 4, 6);
+     rect( fgRectX+324, 192, 4, 6);//10車両目
+     rect( fgRectX+330, 192, 4, 6);
+     rect( fgRectX+336, 192, 4, 6);
+     rect( fgRectX+342, 192, 4, 6);
+     rect( fgRectX+350, 192, 4, 6);//11車両目
+     rect( fgRectX+356, 192, 4, 6);
+     rect( fgRectX+362, 192, 4, 6);
+     rect( fgRectX+368, 192, 4, 6);
+     rect( fgRectX+376, 192, 4, 6);//12車両目
+     rect( fgRectX+382, 192, 4, 6);
+     rect( fgRectX+388, 192, 4, 6);
+     rect( fgRectX+394, 192, 4, 6);
+     rect( fgRectX+402, 192, 4, 6);//13車両目
+     rect( fgRectX+408, 192, 4, 6);
+     rect( fgRectX+414, 192, 4, 6);
+     rect( fgRectX+420, 192, 4, 6);
+     rect( fgRectX+428, 192, 4, 6);//14車両目
+     rect( fgRectX+434, 192, 4, 6);
+     rect( fgRectX+440, 192, 4, 6);
+     rect( fgRectX+446, 192, 4, 6);
+     rect( fgRectX+454, 192, 4, 6);//15車両目
+     rect( fgRectX+460, 192, 4, 6);
+     rect( fgRectX+466, 192, 4, 6);
+     rect( fgRectX+472, 192, 4, 6);
+     rect( fgRectX+480, 192, 4, 6);//16車両目
+     rect( fgRectX+486, 192, 4, 6);
+     rect( fgRectX+492, 192, 4, 6);
+     rect( fgRectX+498, 192, 4, 6);
+     rect( fgRectX+506, 192, 4, 6);//17車両目
+     rect( fgRectX+512, 192, 4, 6);
+     rect( fgRectX+518, 192, 4, 6);
+     rect( fgRectX+524, 192, 4, 6);
+     rect( fgRectX+532, 192, 4, 6);//18車両目
+     rect( fgRectX+538, 192, 4, 6);
+     rect( fgRectX+544, 192, 4, 6);
+     rect( fgRectX+550, 192, 4, 6);
+     rect( fgRectX+558, 192, 4, 6);//19車両目
+     rect( fgRectX+564, 192, 4, 6);
+     rect( fgRectX+570, 192, 4, 6);
+     rect( fgRectX+576, 192, 4, 6);
+     rect( fgRectX+584, 192, 4, 6);//20車両目
+     rect( fgRectX+590, 192, 4, 6);
+     rect( fgRectX+596, 192, 4, 6);
+     rect( fgRectX+602, 192, 4, 6);
+     rect( fgRectX+610, 192, 4, 6);//21車両目
+     rect( fgRectX+616, 192, 4, 6);
+     rect( fgRectX+622, 192, 4, 6);
+     rect( fgRectX+628, 192, 4, 6);
+     rect( fgRectX+636, 192, 4, 6);//22車両目
+     rect( fgRectX+642, 192, 4, 6);
+     rect( fgRectX+648, 192, 4, 6);
+     rect( fgRectX+654, 192, 4, 6);
+     rect( fgRectX+662, 192, 4, 6);//23車両目
+     rect( fgRectX+668, 192, 4, 6);
+     rect( fgRectX+674, 192, 4, 6);
+     rect( fgRectX+680, 192, 4, 6);
+     rect( fgRectX+688, 192, 4, 6);//24車両目
+     rect( fgRectX+694, 192, 4, 6);
+     rect( fgRectX+700, 192, 4, 6);
+     rect( fgRectX+706, 192, 4, 6);
+     rect( fgRectX+714, 192, 4, 6);//25車両目
+     rect( fgRectX+720, 192, 4, 6);
+     rect( fgRectX+726, 192, 4, 6);
+     rect( fgRectX+732, 192, 4, 6);
+     rect( fgRectX+740, 192, 4, 6);//26車両目
+     rect( fgRectX+746, 192, 4, 6);
+     rect( fgRectX+752, 192, 4, 6);
+     rect( fgRectX+758, 192, 4, 6);
+     
+     //車輪
+     fill( 0 );
+     circle( fgRectX+50, 209, 5 );
+     circle( fgRectX+60, 209, 5 );
+     circle( fgRectX+70, 209, 5 );
+     circle( fgRectX+80, 209, 5 );
+     circle( fgRectX+90, 209, 5 );
+     circle( fgRectX+100, 209, 5 );
+     circle( fgRectX+110, 209, 5 );
+     circle( fgRectX+120, 209, 5 );
+     circle( fgRectX+130, 209, 5 );
+     circle( fgRectX+140, 209, 5 );
+     circle( fgRectX+150, 209, 5 );
+     circle( fgRectX+160, 209, 5 );
+     circle( fgRectX+170, 209, 5 );
+     circle( fgRectX+180, 209, 5 );
+     circle( fgRectX+190, 209, 5 );
+     circle( fgRectX+200, 209, 5 );
+     circle( fgRectX+210, 209, 5 );
+     circle( fgRectX+220, 209, 5 );
+     circle( fgRectX+230, 209, 5 );
+     circle( fgRectX+240, 209, 5 );
+     circle( fgRectX+250, 209, 5 );
+     circle( fgRectX+260, 209, 5 );
+     circle( fgRectX+270, 209, 5 );
+     circle( fgRectX+280, 209, 5 );
+     circle( fgRectX+290, 209, 5 );
+     circle( fgRectX+300, 209, 5 );
+     circle( fgRectX+310, 209, 5 );
+     circle( fgRectX+320, 209, 5 );
+     circle( fgRectX+330, 209, 5 );
+     circle( fgRectX+340, 209, 5 );
+     circle( fgRectX+350, 209, 5 );
+     circle( fgRectX+360, 209, 5 );
+     circle( fgRectX+370, 209, 5 );
+     circle( fgRectX+380, 209, 5 );
+     circle( fgRectX+390, 209, 5 );
+     circle( fgRectX+400, 209, 5 );
+     circle( fgRectX+410, 209, 5 );
+     circle( fgRectX+420, 209, 5 );
+     circle( fgRectX+430, 209, 5 );
+     circle( fgRectX+440, 209, 5 );
+     circle( fgRectX+450, 209, 5 );
+     circle( fgRectX+460, 209, 5 );
+     circle( fgRectX+470, 209, 5 );
+     circle( fgRectX+480, 209, 5 );
+     circle( fgRectX+490, 209, 5 );
+     circle( fgRectX+500, 209, 5 );
+     circle( fgRectX+510, 209, 5 );
+     circle( fgRectX+520, 209, 5 );
+     circle( fgRectX+530, 209, 5 );
+     circle( fgRectX+540, 209, 5 );
+     circle( fgRectX+550, 209, 5 );
+     circle( fgRectX+560, 209, 5 );
+     circle( fgRectX+570, 209, 5 );
+     circle( fgRectX+580, 209, 5 );
+     circle( fgRectX+590, 209, 5 );
+     circle( fgRectX+600, 209, 5 );
+     circle( fgRectX+610, 209, 5 );
+     circle( fgRectX+620, 209, 5 );
+     circle( fgRectX+630, 209, 5 );
+     circle( fgRectX+640, 209, 5 );
+     circle( fgRectX+650, 209, 5 );
+     circle( fgRectX+660, 209, 5 );
+     circle( fgRectX+670, 209, 5 );
+     circle( fgRectX+680, 209, 5 );
+     circle( fgRectX+690, 209, 5 );
+     circle( fgRectX+700, 209, 5 );
+     circle( fgRectX+710, 209, 5 );
+     circle( fgRectX+720, 209, 5 );
+     circle( fgRectX+730, 209, 5 );
+     circle( fgRectX+740, 209, 5 );
+     circle( fgRectX+750, 209, 5 );
+     circle( fgRectX+760, 209, 5 );
+
+
+}
+
+void matinami(){
+//夜の町
+   iesecondCurrent = second() * 50;
+  //空
+  fill( 0 );
+  rect( 0, 150, 600, 300 );
+  //月
+  fill( 255, 255, 0 );
+  circle( 300, 230, 160 );
+   
+  pushMatrix();
+  // 現在の秒で位置を変える
+  translate( iesecondCurrent, 0 );
+  
+  //町並み
+  stroke( 100 );
+  fill( 100 );
+  rect( 0, 220, 90, 230 );
+  rect( 90, 280, 60, 170 );
+  rect( 158, 320, 50, 130 );
+  rect( 210, 300, 60, 150 );
+  triangle( 275, 405, 310, 365, 345, 405 );
+  rect( 285, 406, 50, 44 );
+  rect( 350, 300, 60, 150 );
+  rect( 415, 220, 120, 230 );
+  triangle( 540, 410, 570, 370, 600, 410 );
+  rect( 545, 410, 47, 40 );
+  
+  //移動用の町
+  rect( -600, 220, 90, 230 );
+  rect( -510, 280, 60, 170 );
+  rect( -442, 320, 50, 130 );
+  rect( -390, 300, 60, 150 );
+  triangle( -325, 405, -290, 365, -255, 405 );
+  rect( -315, 406, 50, 44 );
+  rect( -250, 300, 60, 150 );
+  rect( -185, 220, 120, 230 );
+  triangle( -60, 410, -30, 370, 0, 410 );
+  rect( -55, 410, 47, 40 );
+  
+  //移動用の町2
+  rect( -600 -600, 220, 90, 230 );
+  rect( -510 -600, 280, 60, 170 );
+  rect( -442 -600, 320, 50, 130 );
+  rect( -390 -600, 300, 60, 150 );
+  triangle( -325 -600, 405, -290 -600, 365, -255 -600, 405 );
+  rect( -315 -600, 406, 50, 44 );
+  rect( -250 -600, 300, 60, 150 );
+  rect( -185 -600, 220, 120, 230 );
+  triangle( -60 -600, 410, -30 -600, 370, 0 -600, 410 );
+  rect( -55 -600, 410, 47, 40 );
+  
+  //移動用の町3
+  rect( -600 -600 * 2, 220, 90, 230 );
+  rect( -510 -600 * 2, 280, 60, 170 );
+  rect( -442 -600 * 2, 320, 50, 130 );
+  rect( -390 -600 * 2, 300, 60, 150 );
+  triangle( -325 -600 * 2, 405, -290 -600 * 2, 365, -255 -600 * 2, 405 );
+  rect( -315 -600 * 2, 406, 50, 44 );
+  rect( -250 -600 * 2, 300, 60, 150 );
+  rect( -185 -600 * 2, 220, 120, 230 );
+  triangle( -60 -600 * 2, 410, -30 -600 * 2, 370, 0 -600 * 2, 410 );
+  rect( -55 -600 * 2, 410, 47, 40 );
+  
+  //移動用の町4
+  rect( -600 -600 * 3, 220, 90, 230 );
+  rect( -510 -600 * 3, 280, 60, 170 );
+  rect( -442 -600 * 3, 320, 50, 130 );
+  rect( -390 -600 * 3, 300, 60, 150 );
+  triangle( -325 -600 * 3, 405, -290 -600 * 3, 365, -255 -600 * 3, 405 );
+  rect( -315 -600 * 3, 406, 50, 44 );
+  rect( -250 -600 * 3, 300, 60, 150 );
+  rect( -185 -600 * 3, 220, 120, 230 );
+  triangle( -60 -600 * 3, 410, -30 -600 * 3, 370, 0 -600 * 3, 410 );
+  rect( -55 -600 * 3, 410, 47, 40 );
+  
+  //移動用の町5
+  rect( -600 -600 * 4, 220, 90, 230 );
+  rect( -510 -600 * 4, 280, 60, 170 );
+  rect( -442 -600 * 4, 320, 50, 130 );
+  rect( -390 -600 * 4, 300, 60, 150 );
+  triangle( -325 -600 * 4, 405, -290 -600 * 4, 365, -255 -600 * 4, 405 );
+  rect( -315 -600 * 4, 406, 50, 44 );
+  rect( -250 -600 * 4, 300, 60, 150 );
+  rect( -185 -600 * 4, 220, 120, 230 );
+  triangle( -60 -600 * 4, 410, -30 -600 * 4, 370, 0 -600 * 4, 410 );
+  rect( -55 -600 * 4, 410, 47, 40 );
+  
+  popMatrix();
+  
+}
+
+void onnanoko(){
+  fill( 40 );//髪
+  circle( 300, 425, 75 );
+  rect( 263, 425, 75, 40 );
+  fill( 254, 247, 240 );//腕
+  rect( 265, 495, 10, 20 );
+  rect( 326, 495, 10, 20 );
+  fill( 0, 27, 70 );//服
+  triangle( 300, 468, 308, 460, 327, 468 );
+  triangle( 300, 468, 292, 460, 273, 468 );
+  fill( 220 );
+  rect( 273, 468, 54, 52 );
+  triangle( 327, 468, 327, 500, 341, 500 );
+  triangle( 273, 468, 273, 500, 259, 500 );
+  fill( 0, 27, 70 );//スカート
+  rect( 273, 527, 54, 15 );
+  triangle( 327, 527, 327, 542, 339, 543 );
+  triangle( 273, 527, 273, 542, 261, 543 );
+  fill( 254, 247, 240 );//肌
+  circle( 300, 425, 60 );
+  rect( 292, 440, 15, 20 );
+  triangle( 292, 460, 300, 468, 308, 460 );
+  fill( 40 );//目
+  rect( 280, 436, 11, 2 );
+  rect( 306, 436, 11, 2 );
+  triangle( 300, 540, 300, 700, 320, 540 );//足
+  triangle( 300, 540, 300, 700, 280, 540 );
+  fill( 0, 27, 70 );
+  rect( 281, 587, 40, 20 );//靴
+  fill( 40 );//前髪
+  arc( 300, 419, 75, 70, radians( 175 ), radians( 365 ), CHORD );
+  fill( 0, 17, 60 );//鞄
+  circle( 300, 497, 60 );
+  fill( 220 );
+  circle( 300, 497, 40 );
+  fill( 0, 17, 60 );
+  rect( 265, 487, 70, 40 );
+}
+
+//対向車線の電車
+void taikoudensya(){
+  
+  PFont font = createFont("MS Gothic",50);
+  textFont (font);
+  
+     // 位置
+ftRectX += 600 * deltaTime;
+
+     noStroke();
+     fill( 0, 0, 30 );
+     rect( ftRectX , 225, 1200, 225 );
+     //電車の柄
+     fill( 50, 0, 0 );
+     rect( ftRectX, 230, 1200, 20 );//上線
+     fill( 50, 0, 0 );
+     rect( ftRectX, 380, 1200, 50 );//下線
+     fill( 0, 0, 10 );//ドア
+     rect( ftRectX+20, 280, 80, 160 );
+     rect( ftRectX+140, 280, 160, 160 );
+     rect( ftRectX+510, 280, 160, 160 );
+     rect( ftRectX+880, 280, 160, 160 );
+     rect( ftRectX+1080, 280, 80, 160 );
+     fill( 0, 0, 30 );//ドア区切り線
+     rect( ftRectX+215, 280, 10, 160 );
+     rect( ftRectX+585, 280, 10, 160 );
+     rect( ftRectX+955, 280, 10, 160 );
+     fill( 210, 210, 0 );//窓
+     rect( ftRectX+30, 290, 60, 80 );
+     rect( ftRectX+150, 290, 55, 80 );
+     rect( ftRectX+235, 290, 55, 80 );
+     rect( ftRectX+330, 290, 150, 80 );
+     rect( ftRectX+520, 290, 55, 80 );
+     rect( ftRectX+605, 290, 55, 80 );
+     rect( ftRectX+700, 290, 150, 80 );
+     rect( ftRectX+890, 290, 55, 80 );
+     rect( ftRectX+975, 290, 55, 80 );
+     rect( ftRectX+1093, 290, 55, 80 );
+     fill( 0, 0, 70 );//窓区切り線
+     rect( ftRectX+400, 290, 10, 80 );
+     rect( ftRectX+770, 290, 10, 80 );
+     fill( 230, 170 );//行先表示
+     rect( ftRectX+361, 245, 90, 35 );
+     fill( 255, 50, 0 );
+     textSize( 15 );
+     text( "きさらぎ", ftRectX+364, 268 );
+     textSize( 10 );
+     text( "方面", ftRectX+427, 268 );
+     
+     fill( 230, 170 );
+     rect( ftRectX+732, 245, 90, 35 );
+     fill( 255, 50, 0 );
+     textSize( 15 );
+     text( "きさらぎ", ftRectX+735, 268 );
+     textSize( 10 );
+     text( "方面", ftRectX+798, 268 );
+     
+     
+}

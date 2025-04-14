@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/musabi-react/static/css/main.28b567ee.css",
-    "main.js": "/musabi-react/static/js/main.10f191be.js",
+    "main.js": "/musabi-react/static/js/main.1e8d74b0.js",
     "index.html": "/musabi-react/index.html",
     "main.28b567ee.css.map": "/musabi-react/static/css/main.28b567ee.css.map",
-    "main.10f191be.js.map": "/musabi-react/static/js/main.10f191be.js.map"
+    "main.1e8d74b0.js.map": "/musabi-react/static/js/main.1e8d74b0.js.map"
   },
   "entrypoints": [
     "static/css/main.28b567ee.css",
-    "static/js/main.10f191be.js"
+    "static/js/main.1e8d74b0.js"
   ]
 }

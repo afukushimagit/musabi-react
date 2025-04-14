@@ -1,0 +1,183 @@
+/**************************************************************
+ 電車の窓からみえる、通過していく景色を表現した。
+ 時で明るさ、分で山、秒で雲が変化し、電柱は１秒おきに通過する。
+ 三角関数を用いて時間帯の明るさを調整したり、for文を用いて連続する田んぼを表現したりした。
+ 
+ **************************************************************/
+/**
+ デバッグ機能
+ 'S'キー：png出力
+ 'H'キー：時が変わったときのアニメーション再生
+ 'M'キー：分が変わったときのアニメーション再生
+ */
+// === 'S'キーを押した時の出力画像名 ===
+//  "K3_[クラス][番号]_[苗字].png"
+String pngName = "K3_A12_fukushima.png";
+
+// === アニメーション用変数/定数 ===
+
+int count =0;
+
+// === Time Handling ===
+
+int hourCurrent;       // 現在の時（0~23）
+int minuteCurrent;     // 現在の分（0~59）
+int secondCurrent;     // 現在の秒（0~59）
+float deltaTime;       // 前フレームからの経過時間（秒,0~1）
+float deltaTimePerSec; // 前回の秒が切り替わってからの経過時間（秒,0~1）
+int isHourAnim = 0;    // アニメーションフラグ（1:アニメーション中）
+int isMinuteAnim = 0;
+int isSecondAnim = 0;
+
+void setup()
+{
+  size( 400, 300 );
+  frameRate( 60 );  // フレームレートの指定
+
+  // === Time Init ===
+  initTime();
+}
+
+void draw()
+{
+  // === Time Update ===
+  updateTimePre();
+
+  //hourCurrent = 1;  // 時 を指定して描画を確認したい場合に一時的に有効化
+
+  // === アニメーションを記述 ===
+
+  background(180, 80, 80);
+  translate(200, 125);
+  noStroke();
+  strokeWeight(1);
+
+  //１時間おきに通過する山↓
+
+  float yama = minuteCurrent*10+secondCurrent/6;
+  fill(50, 80, 50);
+  triangle(150-yama, 20, 450-yama, 20, 300-yama, -40);
+
+  //１分おきに通過する雲↓
+
+  float kumo = secondCurrent*10+deltaTimePerSec*10;
+  fill(200, 100, 50);
+  ellipse(300-kumo, -65, 300, 15);
+
+  //田んぼと土手↓
+
+  int tanbok = 60;
+  int tanbo = (count*4)%tanbok;
+  stroke(0);
+  for (int mai = 0; mai <= 330; mai+=30) {
+    fill(180, 235, 100);
+    quad(-150-tanbo+mai, 20, -120-tanbo+mai, 20, (-120-tanbo+mai)*4, 100, (-150-tanbo+mai)*4, 100);
+  }
+  fill(160, 185, 120);
+  rect(-200, 80, 400, 20); //土手
+
+  //１秒おきに通過する電柱と電線↓
+
+  int denchuk = 900;
+  int denchu = (count*15)%denchuk;
+  noFill();
+  strokeWeight(2);
+  arc(-denchu+300, -80, denchuk, 80, radians(0), radians(180));
+  arc(-denchu+1200, -80, denchuk, 80, radians(0), radians(180));
+  arc(-denchu+300, -60, denchuk, 80, radians(0), radians(180));
+  arc(-denchu+1200, -60, denchuk, 80, radians(0), radians(180));
+  strokeWeight(6);
+  line(-denchu+750, -80, -denchu+750, 80);
+
+  //時間帯によって暗くなるフィルタ↓
+
+  noStroke();
+  fill(0, (1+cos(radians(hourCurrent*15)))*80);
+  rect(-150, -100, 300, 200);
+
+  //車内↓
+
+  noStroke();
+  fill(220);
+  rect(-200, -125, 400, 25);
+  rect(-200, -125, 50, 300);
+  rect(150, -125, 50, 300);
+  rect(-200, 100, 400, 75);
+
+  fill(100, 50, 80);
+  rect(-200, 115, 400, 75);
+
+  fill(150);
+  rect(-135, -125, 5, 300);
+  rect(130, -125, 5, 300);
+  rect(-200, -125, 400, 5);
+  rect(-200, -115, 400, 5);
+
+
+
+  count ++;
+
+
+  // 秒が変化した時のアニメーション
+  if ( secondCurrent != secondPrev )
+  {
+    isSecondAnim = 1;  // アニメーション開始
+
+    // アニメーション初期化
+  }
+  if ( isSecondAnim == 1 )  // アニメーション中
+  {
+    // アニメーション中の処理を記述
+
+
+
+    isSecondAnim = 0;  // アニメーション終了
+  }
+
+
+  // 分が変化した時のアニメーション
+  if ( minuteCurrent != minutePrev )
+  {
+    isMinuteAnim = 1;  // アニメーション開始
+
+    // アニメーション初期化
+  }
+  if ( isMinuteAnim == 1 )  // アニメーション中
+  {
+    // アニメーション中の処理を記述
+
+
+
+    isMinuteAnim = 0;  // アニメーション終了
+  }
+
+
+  // 時が変化した時のアニメーション
+  if ( hourCurrent != hourPrev )
+  {
+    isHourAnim = 1;  // アニメーションの開始
+
+    // アニメーション初期化
+  }
+  if ( isHourAnim == 1 )
+  {
+    // アニメーション中の処理を記述
+
+
+
+    isHourAnim = 0;  // アニメーション終了
+  }
+
+  // 時間をデバッグ表示（ 提出前に非表示にすること．）
+
+  /*
+   fill( 0 );
+   textSize(20);
+   text( hourCurrent + ":" + minuteCurrent + ":" + secondCurrent, 10, 20);
+   text( "deltaTimePerSec: " + deltaTimePerSec, 10, 40);
+   text( "deltaTime: " + deltaTime, 10, 60);
+   */
+
+  // === Time Update ===
+  updateTimePost();
+}
