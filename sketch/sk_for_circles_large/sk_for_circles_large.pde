@@ -1,6 +1,6 @@
-size( 300, 300 );
+size( 600, 600 );
 
-for ( int iSize = 300; iSize > 0; iSize -= 50 )
+for ( int iSize = 600; iSize > 0; iSize -= 50 )
 {
-  circle( 150, 150, iSize );
+  circle( 300, 300, iSize );
 }
